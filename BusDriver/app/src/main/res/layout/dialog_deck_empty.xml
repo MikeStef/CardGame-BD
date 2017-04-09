@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearlayout_dialog_deck_empty"
+    android:orientation="vertical"
+    android:background="@color/dialogBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/out_of_cards"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dialog_separator" />
+
+    <TextView
+        android:id="@+id/text_deck_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/deck_is_empty"
+        android:textAlignment="center"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/dialogEmpty_btn_ok"
+        android:layout_width="wrap_content"
+        android:background="@drawable/btn_ok"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

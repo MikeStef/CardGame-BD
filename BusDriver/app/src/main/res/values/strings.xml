@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Bus Driver</string>
+    <string name="btn_start">Play</string>
+    <string name="btn_red">Red</string>
+    <string name="btn_black">Black</string>
+    <string name="btn_higher">Higher</string>
+    <string name="btn_lower">Lower</string>
+    <string name="question_color">Is the card red or black?</string>
+    <string name="question_value">Is the card of higher or lower value?</string>
+    <string name="incorrect">Incorrect!</string>
+    <string name="correct">Correct!</string>
+    <string name="value_is_higher">Correct! The card is higher.</string>
+    <string name="value_is_lower">The card is lower. Correct!</string>
+    <string name="value_is_equal">The cards are equal! You loose.</string>
+    <string name="img_content_desc">Game card</string>
+    <string name="card_back">CardBack</string>
+    <string name="dialog_title_win">You won!</string>
+    <string name="deck_is_empty">You loose, the deck has no more cards. Press OK to start over.</string>
+    <string name="cards_left">Cards left: </string>
+    <string name="info_text">The game is based on a social drinking game called Busdriver. The dealer puts out
+    5 cards with the front of the card facing down. You start out by guessing if the last dealt card is of color red or black.
+    Going forward, you continue to guess if the next card is of higher or lower value (compared to the last one).
+    Aces are low.
+    \n\nTo win, you have to first guess the color correctly and then all the correct values of the next cards. If you choose to
+    play this in the way of the drinking game, you get a penalty if you guess incorrectly. Penalty means taking a sip of the drink of your choice,
+     the number of sips amounts to how many cards there are currently with the front facing to you.
+    \n\nYou can play until the deck is out of cards(52). Other then that, this is just a guessing game if you choose to play it like it is!
+    </string>
 </resources>

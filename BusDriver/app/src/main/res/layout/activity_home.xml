@@ -8,10 +8,46 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/main_bg"
     tools:context="com.micste.busdriver.HomeActivity">
 
-    <TextView
+    <ImageView
+        tools:ignore="ContentDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_marginTop="60dp"
+        android:src="@drawable/app_logo"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_play"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:onClick="startGame" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/trophy_icon"
+        android:background="@null"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="showHighscore" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/help_icon"
+        android:background="@null"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="showHelp" />
+
+
+
 </RelativeLayout>

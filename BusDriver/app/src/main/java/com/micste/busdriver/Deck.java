@@ -96,15 +96,17 @@ public class Deck {
 
     public Card randomCard() {
 
+        count++;
+
         Random random = new Random();
         int i = random.nextInt(cards.size());
 
         return cards.remove(i);
     }
 
-    public int getSize() {
+    public String getSize() {
 
-        return cards.size();
+        return "" + cards.size();
 
     }
 

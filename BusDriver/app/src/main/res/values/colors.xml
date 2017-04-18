@@ -6,4 +6,5 @@
     <color name="textColor">#FFFFFF</color>
     <color name="dialogBackground">#E85522</color>
     <color name="dialog_separator">#F25d29</color>
+    <color name="colorHeader">#ea6f18</color>
 </resources>

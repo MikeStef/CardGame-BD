@@ -3,6 +3,7 @@ package com.micste.busdriver;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -15,17 +16,20 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
     Handler handler = new Handler();
-    AlphaAnimation fadeOut = new AlphaAnimation(1F, 0F);
-    AlphaAnimation fadeIn = new AlphaAnimation(0F, 1F);
     Animation imageHighlight;
+    MediaPlayer mediaPlayer;
 
     //Views
     ImageView cardImageView1;
@@ -40,14 +44,14 @@ public class GameActivity extends AppCompatActivity {
 
     String colorGuess;
     String valueGuess;
+    String playerName;
     ArrayList<Integer> lastCard = new ArrayList<>();
     Deck deck;
     Card card;
     Boolean isFirstTurn = true;
 
-    /*
-    Note: använd en Handler för att delaya actions(visning av text)
-     */
+    DatabaseHandler dbHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,17 +63,19 @@ public class GameActivity extends AppCompatActivity {
         btn1 = (Button) findViewById(R.id.gamebutton_1);
         btn2 = (Button) findViewById(R.id.gamebutton_2);
         gameText = (TextView) findViewById(R.id.text_gamehint);
-        deckCounter = (TextView) findViewById(R.id.text_card_count);
+        deckCounter = (TextView) findViewById(R.id.number_card_count);
         cardImageView1 = (ImageView) findViewById(R.id.card_1);
         cardImageView2 = (ImageView) findViewById(R.id.card_2);
         cardImageView3 = (ImageView) findViewById(R.id.card_3);
         cardImageView4 = (ImageView) findViewById(R.id.card_4);
         cardImageView5 = (ImageView) findViewById(R.id.card_5);
 
-        deckCounter.setText("Cards left: " + deck.getSize());
+        deckCounter.setText(deck.getSize());
+        mediaPlayer = MediaPlayer.create(this, R.raw.effect_flipcard);
 
         imageHighlight = AnimationUtils.loadAnimation(this, R.anim.image_highlight);
-        highlightCard();
+
+        showSetNameDialog();
 
     }
 
@@ -77,27 +83,17 @@ public class GameActivity extends AppCompatActivity {
 
         gameInputPause();
 
-        //loggar
-        Log.d("TAG", btn1.getText().toString());
-        Log.d("TAG", btn2.getText().toString());
-        Log.d("Array", "Size: " + deck.getSize());
-        Log.d("TAG", "Counter: " + deck.getCount());
-
-        if (!lastCard.isEmpty()) {
-            Log.d("TAG", lastCard.get(lastCard.size() - 1).toString());
-        }
-        //
-
         if (!deck.isEmpty()) {
 
             //för att testa spelet lättare
-            //card = deck.getCardTest();
-            //deck.increaseTestInt();
+            card = deck.getCardTest();
+            deck.increaseTestInt();
 
-            card = deck.randomCard();
+            //card = deck.randomCard();
             cardFlip(getCardView(), true);
+            mediaPlayer.start();
             getCardView().setTag(card.getValue());
-            deckCounter.setText("Cards left: " + deck.getSize());
+            deckCounter.setText(deck.getSize());
 
             if (isFirstTurn) {
                 switch (v.getId()) {
@@ -155,7 +151,7 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }, 2000);
 
-                    handleGameStatus();
+                    checkForWin();
 
                     //Jämför kortet med det förra om värdet är lägre och knapp lägre var tryckt
                 } else if (card.getValue() < lastCard.get(lastCard.size() - 1) && valueGuess.equals("Lower")) {
@@ -172,7 +168,7 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }, 2000);
 
-                    handleGameStatus();
+                    checkForWin();
 
                     //Kolla jämnt värde
                 } else if (card.getValue() == lastCard.get(lastCard.size() - 1)) {
@@ -191,6 +187,10 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    /*
+    Returnerar rätt ImageView som ska användas under spelets gång.
+    null = spelaren har vunnit, alla kort är vända.
+     */
     public ImageView getCardView() {
 
         //Views
@@ -211,6 +211,9 @@ public class GameActivity extends AppCompatActivity {
         return imgView;
     }
 
+    /*
+    Startar om spelet med en 2s delay via handler, behåller mängden kort i deck.
+     */
     public void resetGame() {
 
         handler.postDelayed(new Runnable() {
@@ -248,29 +251,17 @@ public class GameActivity extends AppCompatActivity {
 
             }
         }, 2000);
+        deckCounter.setText(deck.getSize());
 
     }
 
-    public boolean checkForWin() {
-
-        boolean hasWon = false;
+    public void checkForWin() {
 
         if (getCardView() == null) {
-            hasWon = true;
-        }
-
-        return hasWon;
-
-    }
-
-    public void handleGameStatus() {
-
-        if (checkForWin()) {
             showWinDialog();
         }
 
     }
-
 
     public void cardFlip(final ImageView imageView, final Boolean isBackShown) {
 
@@ -329,6 +320,10 @@ public class GameActivity extends AppCompatActivity {
 
     public void showWinDialog() {
 
+        dbHandler = new DatabaseHandler();
+
+        dbHandler.writeNewHighscore(playerName, deck.getCount());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog winDialog = builder.create();
         LayoutInflater inflater = getLayoutInflater();
@@ -342,8 +337,9 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 winDialog.cancel();
-                resetGame();
                 deck = new Deck();
+                resetGame();
+
             }
         });
 
@@ -394,4 +390,35 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    public void showSetNameDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog setNameDialog = builder.create();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogSetNameLayout = inflater.inflate(R.layout.dialog_set_name, null);
+
+        setNameDialog.setView(dialogSetNameLayout);
+        setNameDialog.setCancelable(false);
+
+        final EditText et_setName = (EditText) dialogSetNameLayout.findViewById(R.id.et_name);
+        Button btn_ok = (Button) dialogSetNameLayout.findViewById(R.id.dialogSetName_btn_ok);
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playerName = et_setName.getText().toString();
+                setNameDialog.cancel();
+                highlightCard();
+            }
+        });
+
+        setNameDialog.show();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.release();
+    }
 }

@@ -28,6 +28,10 @@ public class HomeActivity extends AppCompatActivity {
 
         view.startAnimation(buttonClick);
 
+        Intent intent = new Intent(HomeActivity.this, HighscoreActivity.class);
+
+        startActivity(intent);
+
     }
 
     public void showHelp(View view) {

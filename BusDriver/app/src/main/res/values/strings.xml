@@ -26,4 +26,5 @@
      the number of sips amounts to how many cards there are currently with the front facing to you.
     \n\nYou can play until the deck is out of cards(52). Other then that, this is just a guessing game if you choose to play it like it is!
     </string>
+    <string name="playerName">Enter your name or nickname</string>
 </resources>

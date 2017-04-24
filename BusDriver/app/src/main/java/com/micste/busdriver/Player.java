@@ -9,6 +9,7 @@ public class Player {
     private String name;
     private int score;
 
+    //tom konstruktör för firebase
     public Player() {
 
     }

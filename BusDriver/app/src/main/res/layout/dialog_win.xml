@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/content_description_won"
         android:src="@drawable/you_won"/>
 
     <LinearLayout
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
+            android:contentDescription="@string/content_description_star"
             android:src="@drawable/icon_star_empty"/>
 
         <ImageView
@@ -39,12 +41,14 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
+            android:contentDescription="@string/content_description_star"
             android:src="@drawable/icon_star_empty"/>
 
         <ImageView
             android:id="@+id/star3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/content_description_star"
             android:src="@drawable/icon_star_empty"/>
 
     </LinearLayout>

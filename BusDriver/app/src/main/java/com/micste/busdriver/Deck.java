@@ -1,6 +1,7 @@
 package com.micste.busdriver;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -84,6 +85,10 @@ public class Deck {
 
         test++;
 
+    }
+
+    public void shuffleCards() {
+        Collections.shuffle(cards);
     }
 
     public Card getCardTest() {

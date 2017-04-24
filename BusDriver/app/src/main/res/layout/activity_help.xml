@@ -11,21 +11,19 @@
     android:background="@drawable/main_bg"
     tools:context="com.micste.busdriver.HelpActivity">
 
-    <TextView
-        android:id="@+id/info_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:padding="5dp"
-        android:text="@string/info_text" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="goBack"
-        android:src="@drawable/btn_ok_small" />
+        <TextView
+            android:id="@+id/info_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:padding="8dp"
+            android:text="@string/info_text" />
+
+    </ScrollView>
+
 
 </RelativeLayout>

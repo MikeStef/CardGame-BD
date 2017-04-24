@@ -21,36 +21,38 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:contentDescription="@string/content_description_highscore"
             android:src="@drawable/highscore"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
+            android:contentDescription="@string/content_description_trophy"
             android:src="@drawable/icon_trophy_big"/>
 
     </RelativeLayout>
-
-    <ImageButton
-        android:id="@+id/hs_btn_ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="goBack"
-        android:src="@drawable/btn_ok_small" />
 
     <ListView
         android:id="@+id/lv_highscore"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp"
-        android:layout_below="@id/rel_highscore_header"
-        android:layout_above="@id/hs_btn_ok">
+        android:layout_below="@id/rel_highscore_header">
 
     </ListView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:visibility="visible"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

@@ -9,48 +9,45 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
-    Handler handler = new Handler();
-    Animation imageHighlight;
-    MediaPlayer mediaPlayer;
+    private Handler handler = new Handler();
+    private Animation imageHighlight;
+    private MediaPlayer mediaPlayer;
 
     //Views
-    ImageView cardImageView1;
-    ImageView cardImageView2;
-    ImageView cardImageView3;
-    ImageView cardImageView4;
-    ImageView cardImageView5;
-    Button btn1;
-    Button btn2;
-    TextView gameText;
-    TextView deckCounter;
+    private ImageView cardImageView1;
+    private ImageView cardImageView2;
+    private ImageView cardImageView3;
+    private ImageView cardImageView4;
+    private ImageView cardImageView5;
+    private Button btn1;
+    private Button btn2;
+    private TextView gameText;
+    private TextView deckCounter;
 
-    String colorGuess;
-    String valueGuess;
-    String playerName;
-    ArrayList<Integer> lastCard = new ArrayList<>();
-    Deck deck;
-    Card card;
-    Boolean isFirstTurn = true;
+    private String colorGuess;
+    private String valueGuess;
+    private String playerName;
+    private ArrayList<Integer> lastCard = new ArrayList<>();
+    private Deck deck;
+    private Card card;
+    private Boolean isFirstTurn = true;
 
-    DatabaseHandler dbHandler;
+    private DatabaseHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +56,7 @@ public class GameActivity extends AppCompatActivity {
 
         deck = new Deck();
 
-        //Define views
+        //Definera views
         btn1 = (Button) findViewById(R.id.gamebutton_1);
         btn2 = (Button) findViewById(R.id.gamebutton_2);
         gameText = (TextView) findViewById(R.id.text_gamehint);
@@ -85,9 +82,10 @@ public class GameActivity extends AppCompatActivity {
 
         if (!deck.isEmpty()) {
 
-            //för att testa spelet lättare
+            //för att testa spelet lättare används denna metod istället för randomCard()
             card = deck.getCardTest();
             deck.increaseTestInt();
+            //
 
             //card = deck.randomCard();
             cardFlip(getCardView(), true);
@@ -127,7 +125,7 @@ public class GameActivity extends AppCompatActivity {
                     gameText.setText(getResources().getString(R.string.incorrect));
                     resetGame();
                 }
-            } else {
+            } else { //Logik som körs om !isFirstTurn
                 switch (v.getId()) {
                     case R.id.gamebutton_1:
                         valueGuess = btn1.getText().toString();
@@ -193,7 +191,6 @@ public class GameActivity extends AppCompatActivity {
      */
     public ImageView getCardView() {
 
-        //Views
         ImageView imgView = null;
 
         if (cardImageView5.getTag().equals("CardBack")) {
@@ -213,6 +210,7 @@ public class GameActivity extends AppCompatActivity {
 
     /*
     Startar om spelet med en 2s delay via handler, behåller mängden kort i deck.
+    Flippar tillbaka alla kort som är vända.
      */
     public void resetGame() {
 
@@ -268,15 +266,16 @@ public class GameActivity extends AppCompatActivity {
         final Drawable cardFront = ContextCompat.getDrawable(this, card.getImage());
         final Drawable cardBack = ContextCompat.getDrawable(this, R.drawable.card_back);
         final Drawable cardBackHighlighted = ContextCompat.getDrawable(this, R.drawable.card_back_qmark);
+        imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         imageView.setRotationY(0f);
-        imageView.animate().rotationY(90f).setDuration(100).setListener(new AnimatorListenerAdapter() {
+        imageView.animate().rotationY(90f).setDuration(150).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 if (isBackShown) {
                     imageView.setImageDrawable(cardFront);
                     imageView.setRotationY(270f);
-                    imageView.animate().rotationY(360f).setDuration(100).setListener(null);
+                    imageView.animate().rotationY(360f).setDuration(150).setListener(null);
                     imageView.clearAnimation();
                 } else {
 
@@ -286,13 +285,17 @@ public class GameActivity extends AppCompatActivity {
                         imageView.setImageDrawable(cardBack);
                     }
                     imageView.setRotationY(270f);
-                    imageView.animate().rotationY(360f).setDuration(100).setListener(null);
+                    imageView.animate().rotationY(360f).setDuration(150).setListener(null);
                 }
+                imageView.setLayerType(View.LAYER_TYPE_NONE, null);
             }
         });
 
     }
 
+    /*
+    Hindrar gameInput i 2 sek under tiden då kort flippas/spel text ändras.
+     */
     public void gameInputPause() {
 
         btn1.setEnabled(false);
@@ -406,9 +409,15 @@ public class GameActivity extends AppCompatActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                playerName = et_setName.getText().toString();
-                setNameDialog.cancel();
-                highlightCard();
+                if (!et_setName.getText().toString().isEmpty()) {
+                    playerName = et_setName.getText().toString();
+                    setNameDialog.cancel();
+                    highlightCard();
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "You need to enter your name/nickname", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
             }
         });
 

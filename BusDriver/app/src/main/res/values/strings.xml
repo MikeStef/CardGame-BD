@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bus Driver</string>
+    <string name="app_name">Fate of Cards</string>
     <string name="btn_start">Play</string>
     <string name="btn_red">Red</string>
     <string name="btn_black">Black</string>
@@ -27,4 +27,16 @@
     \n\nYou can play until the deck is out of cards(52). Other then that, this is just a guessing game if you choose to play it like it is!
     </string>
     <string name="playerName">Enter your name or nickname</string>
+    <string name="tries">tries</string>
+    <string name="content_description_counter">Cards left count</string>
+    <string name="content_description_highscore">Highscore image</string>
+    <string name="content_description_trophy">Trophy image</string>
+    <string name="content_description_play_btn">Play button</string>
+    <string name="content_description_hs_btn">Show highscore button</string>
+    <string name="content_description_help_btn">Get help button</string>
+    <string name="content_description_outofcards">Text out of cards</string>
+    <string name="content_description_hello">Text hello</string>
+    <string name="content_description_won">Text you won</string>
+    <string name="content_description_star">Rating star</string>
+
 </resources>

@@ -25,10 +25,4 @@ public class Card {
         return color;
     }
 
-    //För test atm
-    public String toString(){
-        String cardImage = "Image src: " + image;
-
-        return cardImage;
-    }
 }

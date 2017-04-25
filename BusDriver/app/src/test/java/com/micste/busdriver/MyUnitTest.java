@@ -37,7 +37,7 @@ public class MyUnitTest {
 
         int result = deck.getCount();
 
-        assertEquals("Count not increasing to 1: ", expectedCount, result);
+        assertEquals("Count not increasing to 3: ", expectedCount, result);
 
     }
 

@@ -47,14 +47,13 @@ public class GameActivity extends AppCompatActivity {
     private Card card;
     private Boolean isFirstTurn = true;
 
-    private DatabaseHandler dbHandler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
         deck = new Deck();
+        deck.shuffleCards();
 
         //Definera views
         btn1 = (Button) findViewById(R.id.gamebutton_1);
@@ -82,12 +81,13 @@ public class GameActivity extends AppCompatActivity {
 
         if (!deck.isEmpty()) {
 
-            //för att testa spelet lättare används denna metod istället för randomCard()
+            /*
+            för att testa spelet lättare används denna metod istället för randomCard()
             card = deck.getCardTest();
             deck.increaseTestInt();
-            //
+            */
 
-            //card = deck.randomCard();
+            card = deck.randomCard();
             cardFlip(getCardView(), true);
             mediaPlayer.start();
             getCardView().setTag(card.getValue());
@@ -108,6 +108,9 @@ public class GameActivity extends AppCompatActivity {
                     isFirstTurn = false;
                     lastCard.add(card.getValue());
 
+                    if (getCardView() == null) {
+
+                    }
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -139,34 +142,44 @@ public class GameActivity extends AppCompatActivity {
                     gameText.setText(getResources().getString(R.string.value_is_higher));
                     lastCard.add(card.getValue());
 
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //delay ändring av text
-                            gameText.setText(getResources().getString(R.string.question_value));
-                            highlightCard();
+                    if (getCardView() == null) {
+                        gameWon();
+                    } else {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //delay ändring av text
+                                //knapparna justerat till nästa fråga
+                                gameText.setText(getResources().getString(R.string.question_value));
+                                btn1.setText(getResources().getString(R.string.btn_higher));
+                                btn2.setText(getResources().getString(R.string.btn_lower));
+                                highlightCard();
 
-                        }
-                    }, 2000);
-
-                    checkForWin();
+                            }
+                        }, 2000);
+                    }
 
                     //Jämför kortet med det förra om värdet är lägre och knapp lägre var tryckt
                 } else if (card.getValue() < lastCard.get(lastCard.size() - 1) && valueGuess.equals("Lower")) {
                     gameText.setText(getResources().getString(R.string.value_is_lower));
                     lastCard.add(card.getValue());
 
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //delay ändring av text
-                            gameText.setText(getResources().getString(R.string.question_value));
-                            highlightCard();
+                    if (getCardView() == null) {
+                        gameWon();
+                    } else {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //delay ändring av text
+                                //knapparna justerat till nästa fråga
+                                gameText.setText(getResources().getString(R.string.question_value));
+                                btn1.setText(getResources().getString(R.string.btn_higher));
+                                btn2.setText(getResources().getString(R.string.btn_lower));
+                                highlightCard();
 
-                        }
-                    }, 2000);
-
-                    checkForWin();
+                            }
+                        }, 2000);
+                    }
 
                     //Kolla jämnt värde
                 } else if (card.getValue() == lastCard.get(lastCard.size() - 1)) {
@@ -253,10 +266,16 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    public void checkForWin() {
+    public void gameWon() {
 
         if (getCardView() == null) {
-            showWinDialog();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showWinDialog();
+                }
+            }, 1000);
+
         }
 
     }
@@ -323,7 +342,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void showWinDialog() {
 
-        dbHandler = new DatabaseHandler();
+        DatabaseHandler dbHandler = new DatabaseHandler();
 
         dbHandler.writeNewHighscore(playerName, deck.getCount());
 
@@ -383,8 +402,9 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 deckEmptyDialog.cancel();
-                resetGame();
                 deck = new Deck();
+                resetGame();
+
             }
         });
 
@@ -430,4 +450,6 @@ public class GameActivity extends AppCompatActivity {
         super.onDestroy();
         mediaPlayer.release();
     }
+
+
 }
